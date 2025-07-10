@@ -26,6 +26,8 @@ namespace LuongVinhKhang.SachOnline.Models
 
         [Column("soluongban")]
         public int SoLuongBan { get; set; }
+        [Column("soluong")]
+        public int SoLuong { get; set; }
 
         public string MoTa { get; set; }
     }

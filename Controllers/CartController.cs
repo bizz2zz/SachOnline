@@ -1,4 +1,5 @@
-﻿using LuongVinhKhang.SachOnline.Data;
+﻿
+using LuongVinhKhang.SachOnline.Data;
 using LuongVinhKhang.SachOnline.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
@@ -6,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
-namespace LuongVinhKhang.SachOnline.Controllers
+namespace HuynhVanQuang.SachOnline.Controllers
 {
     public class CartController : Controller
     {
@@ -35,7 +36,16 @@ namespace LuongVinhKhang.SachOnline.Controllers
                 return NotFound("Không tìm thấy thông tin người dùng.");
             }
 
-
+            if (user != null)
+            {
+                ViewBag.CartCount = await _context.Cart
+                    .Where(c => c.MaKH == user.MaKH)
+                    .SumAsync(c => (int?)c.Quantity) ?? 0;
+            }
+            else
+            {
+                ViewBag.CartCount = 0;
+            }
             var cartItems = await _context.Cart
                 .Include(c => c.Product)
                     .ThenInclude(p => p.ChuDe)
@@ -59,32 +69,42 @@ namespace LuongVinhKhang.SachOnline.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
-
             if (!User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Login", "Account");
             }
 
             var taiKhoan = User.Identity.Name;
-
             var user = await _context.Users.FirstOrDefaultAsync(u => u.TaiKhoan == taiKhoan);
             if (user == null)
             {
                 return NotFound("Không tìm thấy thông tin người dùng.");
             }
 
+            var product = await _context.Product.FindAsync(productId);
+            if (product == null)
+            {
+                return NotFound("Sản phẩm không tồn tại.");
+            }
 
             var existingCartItem = await _context.Cart
                 .FirstOrDefaultAsync(c => c.MaKH == user.MaKH && c.ProductId == productId);
 
+            int currentCartQuantity = existingCartItem?.Quantity ?? 0;
+            int newTotalQuantity = currentCartQuantity + quantity;
+
+            if (newTotalQuantity > product.SoLuong)
+            {
+                TempData["ErrorMessage"] = $"Sách \"{product.Name}\" chỉ còn {product.SoLuong} sản phẩm trong kho. Xin vui lòng chọn sản phẩm khác!";
+                return RedirectToAction("Cart");
+            }
+
             if (existingCartItem != null)
             {
-                existingCartItem.Quantity += quantity;
+                existingCartItem.Quantity = newTotalQuantity;
             }
             else
             {
-                
-
                 var cartItem = new Cart
                 {
                     MaKH = user.MaKH,
@@ -98,6 +118,7 @@ namespace LuongVinhKhang.SachOnline.Controllers
             return RedirectToAction("Cart");
         }
 
+
         [HttpPost]
         public async Task<IActionResult> UpdateCart(List<CartUpdateViewModel> cartItems)
         {
@@ -106,19 +127,40 @@ namespace LuongVinhKhang.SachOnline.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            bool hasAdjustment = false;
+
             foreach (var item in cartItems)
             {
                 var cartItem = await _context.Cart.FindAsync(item.CartId);
+
                 if (cartItem != null && item.Quantity > 0)
                 {
-                    cartItem.Quantity = item.Quantity;
+                    var product = await _context.Product.FindAsync(cartItem.ProductId);
+                    if (product != null)
+                    {
+                        if (item.Quantity > product.SoLuong)
+                        {
+                            cartItem.Quantity = product.SoLuong;
+                            hasAdjustment = true;
+                        }
+                        else
+                        {
+                            cartItem.Quantity = item.Quantity;
+                        }
+                    }
                 }
             }
 
             await _context.SaveChangesAsync();
 
+            if (hasAdjustment)
+            {
+                TempData["ErrorMessage"] = "Một số sản phẩm đã được điều chỉnh về số lượng tối đa hiện có trong kho.";
+            }
+
             return RedirectToAction("Cart");
         }
+
 
 
         [HttpPost]
