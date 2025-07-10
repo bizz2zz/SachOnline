@@ -1,0 +1,83 @@
+﻿@model LuongVinhKhang.SachOnline.Models.Product
+
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-edit"></i> Chỉnh sửa Sản phẩm</h2>
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Quay lại
+    </a>
+</div>
+
+@Html.ValidationSummary(true, "", new { @class = "alert alert-danger" })
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Tên sản phẩm</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Giá</label>
+        <input asp-for="Price" class="form-control" type="number" min="0" step="1000" />
+        <span asp-validation-for="Price" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Image" class="form-label">Ảnh</label>
+        <input asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label">Mô tả</label>
+<textarea asp-for="MoTa" id="MoTa" class="form-control"></textarea>
+        <span asp-validation-for="MoTa" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ChuDeId" class="form-label">Chủ đề</label>
+        <select asp-for="ChuDeId"
+                asp-items="@(new SelectList(ViewBag.ChuDeList ?? Enumerable.Empty<LuongVinhKhang.SachOnline.Models.ChuDe>(), "Id", "Name"))"
+                class="form-control">
+            <option value="">-- Chọn chủ đề --</option>
+        </select>
+        <span asp-validation-for="ChuDeId" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NhaXuatBanId" class="form-label">Nhà xuất bản</label>
+        <select asp-for="NhaXuatBanId"
+                asp-items="@(new SelectList(ViewBag.NxbList ?? new List<object>(), "Id", "Name"))"
+                class="form-control">
+            <option value="">-- Chọn nhà xuất bản --</option>
+        </select>
+        <span asp-validation-for="NhaXuatBanId" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        <i class="fas fa-save"></i> Lưu thay đổi
+    </button>
+</form>
+
+@if (!string.IsNullOrEmpty(ViewBag.DebugInfo))
+{
+    <div class="alert alert-warning mt-3">
+        @Html.Raw(ViewBag.DebugInfo)
+    </div>
+}
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace("MoTa");
+    </script>
+}

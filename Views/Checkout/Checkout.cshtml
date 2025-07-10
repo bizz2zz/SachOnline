@@ -1,0 +1,85 @@
+﻿@model List<LuongVinhKhang.SachOnline.Models.Cart>
+@{
+    ViewData["Title"] = "Thanh toán";
+    var user = ViewBag.UserInfo as LuongVinhKhang.SachOnline.Models.User;
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">THÔNG TIN ĐƠN HÀNG</h2>
+    <hr />
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Giỏ hàng của bạn đang trống.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Mã Sách</th>
+                    <th>Tên Sách</th>
+                    <th>Ảnh Bìa</th>
+                    <th>Số Lượng</th>
+                    <th>Đơn Giá</th>
+                    <th>Thành Tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>@item.Product?.Name</td>
+                        <td><img src="@Url.Content("~/Images/" + (item.Product?.Image ?? "default.jpg"))" alt="@item.Product?.Name" style="width: 50px;" /></td>
+                        <td>@item.Quantity</td>
+                        <td>@(item.Product?.Price.ToString("N0") ?? "0") VNĐ</td>
+                        <td>@((item.Product?.Price * item.Quantity)?.ToString("N0") ?? "0") VNĐ</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" class="text-end fw-bold">Tổng tiền:</td>
+                    <td class="fw-bold">@Model.Sum(item => item.Product.Price * item.Quantity).ToString("N0") VNĐ</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <h3 class="mt-4">THÔNG TIN ĐẶT HÀNG</h3>
+        <hr />
+
+        <form id="orderForm" method="post">
+            <div class="mb-3">
+                <label class="form-label">Họ tên</label>
+                <input type="text" class="form-control" name="hoTen" value="@user?.HoTen" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Địa chỉ</label>
+                <input type="text" class="form-control" name="diaChi" value="@user?.DiaChi" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Điện thoại</label>
+                <input type="text" class="form-control" name="dienThoai" value="@user?.DienThoai" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ngày giao</label>
+                <input type="date" class="form-control" name="ngayGiao" required min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            </div>
+
+                <button type="submit" class="btn btn-success me-2" formaction="@Url.Action("Notification")">
+                    Thanh toán tại nhà
+                </button>
+
+
+                <button type="submit" class="btn btn-primary" formaction="@Url.Action("PlaceOrder", "Order")">
+                    Thanh toán Online
+                </button>         
+
+
+            <a href="@Url.Action("Cart", "Cart")" class="btn btn-secondary ms-2">Quay lại giỏ hàng</a>
+        </form>
+    }
+</div>

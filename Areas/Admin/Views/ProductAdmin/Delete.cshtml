@@ -1,0 +1,15 @@
+﻿@model LuongVinhKhang.SachOnline.Models.Product
+
+@{
+    ViewData["Title"] = "Xóa Sản phẩm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Xác nhận xóa</h2>
+<h3>Bạn có chắc muốn xóa sản phẩm "@Model.Name"?</h3>
+<form asp-action="Delete" asp-controller="ProductAdmin" asp-area="Admin" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" asp-controller="ProductAdmin" asp-area="Admin" class="btn btn-secondary">Hủy</a>
+</form>

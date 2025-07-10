@@ -1,0 +1,50 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center">Đăng nhập</h2>
+<hr />
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(ViewBag.DebugInfo))
+        {
+            <div class="alert alert-info alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                @ViewBag.DebugInfo
+            </div>
+        }
+        <form asp-action="Login" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="taiKhoan" class="col-sm-3 control-label">Tài khoản</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="taiKhoan" name="taiKhoan" placeholder="Nhập tài khoản" required />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="matKhau" class="col-sm-3 control-label">Mật khẩu</label>
+                <div class="col-sm-9">
+                    <input type="password" class="form-control" id="matKhau" name="matKhau" placeholder="Nhập mật khẩu" required />
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <div class="col-sm-offset-3 col-sm-9">
+                    <button type="submit" class="btn btn-primary btn-lg" style="min-width: 150px; margin-right: 10px;background-color: #17a2b8; border-color: #17a2b8; color: #fff;">
+                         Đăng nhập
+                    </button>
+                    <a href="@Url.Action("Register", "Account")" class="btn btn-default btn-lg" style="min-width: 150px;">
+                         Đăng ký
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

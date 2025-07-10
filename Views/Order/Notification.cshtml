@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Xác nhận đơn hàng";
+    // Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<div class="container mt-5 mb-5">
+    @if (TempData["SuccessMessage"] != null && TempData["ErrorMessage"] == null)
+    {
+        <div class="alert alert-success text-center py-5 shadow-sm">
+            <h2 class="mb-4 text-success"><i class="bi bi-check-circle-fill"></i> Đặt hàng thành công!</h2>
+            <p class="lead">Cảm ơn quý khách đã tin tưởng và đặt hàng tại <strong>SachOnline</strong>.</p>
+            <p>@TempData["SuccessMessage"]</p>
+            <div class="mt-4">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Trở về trang chủ</a>
+            </div>
+        </div>
+    }
+    else if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger text-center py-5 shadow-sm">
+            <h2 class="mb-4 text-danger"><i class="bi bi-exclamation-circle-fill"></i> Có lỗi xảy ra!</h2>
+            <p>@TempData["ErrorMessage"]</p>
+            <div class="mt-4">
+                <a href="@Url.Action("Cart", "Cart")" class="btn btn-secondary">Quay lại giỏ hàng</a>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary ms-2">Trở về trang chủ</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center py-5 shadow-sm">
+            <h2 class="mb-4">Thông báo</h2>
+            <p>Không có thông tin để hiển thị.</p>
+            <div class="mt-4">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Trở về trang chủ</a>
+            </div>
+        </div>
+    }
+</div>

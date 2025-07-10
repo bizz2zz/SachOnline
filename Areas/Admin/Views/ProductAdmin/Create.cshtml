@@ -1,0 +1,71 @@
+﻿@model LuongVinhKhang.SachOnline.Models.Product
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+@{
+    ViewData["Title"] = "Thêm Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml"; 
+}
+
+<h2>Thêm Sản phẩm Mới</h2>
+
+@* Hiển thị lỗi tổng *@
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+<form asp-action="Create" asp-controller="ProductAdmin" asp-area="Admin" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Name">Tên sản phẩm</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price">Giá</label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Image">Ảnh</label>
+        <input asp-for="Image" class="form-control" />
+        <span asp-validation-for="Image" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MoTa">Mô tả</label>
+        <textarea asp-for="MoTa" class="form-control"></textarea>
+        <span asp-validation-for="MoTa" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ChuDeId">Chủ đề</label>
+        <select asp-for="ChuDeId"
+                asp-items="@(new SelectList(ViewBag.ChuDeList ?? Enumerable.Empty<LuongVinhKhang.SachOnline.Models.ChuDe>(), "Id", "Name"))"
+                class="form-control">
+            <option value="">-- Chọn chủ đề --</option>
+        </select>
+        <span asp-validation-for="ChuDeId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NhaXuatBanId">Nhà xuất bản</label>
+        <select asp-for="NhaXuatBanId"
+                asp-items="@(new SelectList(ViewBag.NxbList ?? Enumerable.Empty<LuongVinhKhang.SachOnline.Models.NhaXuatBan>(), "Id", "Name"))"
+                class="form-control">
+            <option value="">-- Chọn nhà xuất bản --</option>
+        </select>
+        <span asp-validation-for="NhaXuatBanId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Thêm</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('MoTa');
+    </script>
+}

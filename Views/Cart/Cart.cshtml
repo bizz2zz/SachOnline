@@ -1,0 +1,93 @@
+﻿@model List<LuongVinhKhang.SachOnline.Models.Cart>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">🛒 Giỏ hàng của bạn</h2>
+    <hr />
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning text-center">
+            Giỏ hàng của bạn đang trống.
+        </div>
+    }
+    else
+    {
+        <form asp-action="UpdateCart" method="post" id="cartForm">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover align-middle">
+                    <thead class="table-dark text-center">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var item = Model[i];
+                            <tr>
+                                <td class="d-flex align-items-center gap-3">
+                                    <img src="@Url.Content("~/Images/" + (item.Product?.Image ?? "default.jpg"))" alt="@item.Product?.Name" class="img-thumbnail" style="width: 70px;" />
+                                    <span>@(item.Product?.Name ?? "Tên sản phẩm không xác định")</span>
+                                </td>
+                                <td class="text-center text-danger fw-bold">
+                                    @(item.Product?.Price.ToString("N0") ?? "0") VNĐ
+                                </td>
+
+
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+                                            <input type="hidden" name="cartItems[@i].CartId" value="@Model[i].CartId" />
+                                            <input type="number" name="cartItems[@i].Quantity" value="@Model[i].Quantity" min="1"
+                                                   class="form-control form-control-sm text-center quantity-input" style="width: 60px;" />
+                                        </div>
+                                    </td>
+
+                        
+
+                                <td class="text-center fw-bold text-success">
+                                    @((item.Product?.Price * item.Quantity)?.ToString("N0") ?? "0") VNĐ
+                                </td>
+                                <td class="text-center">
+                                    <form asp-action="RemoveFromCart" method="post">
+                                        <input type="hidden" name="cartId" value="@item.CartId" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Xóa</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+                            <td class="fw-bold text-success text-center">
+                                @Model.Where(item => item.Product != null).Sum(item => item.Product.Price * item.Quantity).ToString("N0") VNĐ
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="text-right">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary">
+                    ← Tiếp tục mua sắm
+                </a>
+
+                <div class="form-inline">
+                    <button type="submit" class="btn btn-primary">Cập nhật giỏ hàng 🛠</button>
+                    <a href="@Url.Action("Checkout", "Checkout")" class="btn btn-success">Thanh toán →</a>
+                </div>
+            </div>
+        </form>
+    }
+</div>
+

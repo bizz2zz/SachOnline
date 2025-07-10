@@ -1,0 +1,65 @@
+﻿@model LuongVinhKhang.SachOnline.Models.Order
+
+@{
+    ViewData["Title"] = "Chi tiết Đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Chi tiết Đơn hàng #@Model.OrderId</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Thông tin đơn hàng</h5>
+        <p><strong>Khách hàng:</strong> @Model.User?.HoTen</p>
+        <p><strong>Địa chỉ:</strong> @Model.DiaChi</p>
+        <p><strong>Điện thoại:</strong> @Model.DienThoai</p>
+        <p><strong>Ngày đặt:</strong> @Model.NgayDat.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Ngày giao:</strong> @Model.NgayGiao?.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Trạng thái:</strong> @Model.TrangThai</p>
+        <p><strong>Tổng tiền:</strong> @Model.TongTien.ToString("N0") VNĐ</p>
+        <p><strong>Trạng thái thanh toán:</strong> @Model.PaymentStatus</p>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h5 class="card-title">Chi tiết sản phẩm</h5>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Số lượng</th>
+                    <th>Đơn giá</th>
+                    <th>Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var detail in Model.OrderDetails)
+                {
+                    <tr>
+                        <td>@detail.Product?.Name</td>
+                        <td>@detail.SoLuong</td>
+                        <td>@detail.DonGia.ToString("N0") VNĐ</td>
+                        <td>@detail.ThanhTien.ToString("N0") VNĐ</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form asp-action="UpdateStatus" asp-controller="OrderAdmin" asp-area="Admin" method="post" class="mt-3">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="orderId" value="@Model.OrderId" />
+    <div class="form-group">
+        <label>Trạng thái mới</label>
+        <select asp-for="TrangThai" class="form-control" name="trangThai">
+            <option value="Đang xử lý">Đang xử lý</option>
+            <option value="Đã giao">Đã giao</option>
+            <option value="Đã hủy">Đã hủy</option>
+        </select>
+
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Cập nhật trạng thái</button>
+    <a asp-action="Index" asp-controller="OrderAdmin" asp-area="Admin" class="btn btn-secondary mt-2">Quay lại</a>
+</form>

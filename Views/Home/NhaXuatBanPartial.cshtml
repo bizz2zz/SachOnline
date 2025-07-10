@@ -1,0 +1,9 @@
+﻿<ul class="list-group">
+    <li class="list-group-item active" style="font-weight: bold; text-align: center">SÁCH THEO NHÀ XUẤT BẢN</li>
+    @foreach (var nxb in ViewBag.NhaXuatBanList)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("BooksByNhaXuatBan", "Home", new { id = nxb.Id })">@nxb.Name</a>
+        </li>
+    }
+</ul>

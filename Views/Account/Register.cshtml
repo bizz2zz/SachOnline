@@ -1,0 +1,60 @@
+﻿<form asp-action="Register" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label for="hoTen" class="col-sm-3 control-label">Họ và tên</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="hoTen" name="hoTen" placeholder="Nhập họ và tên" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="taiKhoan" class="col-sm-3 control-label">Tài khoản</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="taiKhoan" name="taiKhoan" placeholder="Nhập tài khoản" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="matKhau" class="col-sm-3 control-label">Mật khẩu</label>
+        <div class="col-sm-9">
+            <input type="password" class="form-control" id="matKhau" name="matKhau" placeholder="Nhập mật khẩu" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="confirmMatKhau" class="col-sm-3 control-label">Xác nhận mật khẩu</label>
+        <div class="col-sm-9">
+            <input type="password" class="form-control" id="confirmMatKhau" name="confirmMatKhau" placeholder="Xác nhận mật khẩu" required />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email" class="col-sm-3 control-label">Email</label>
+        <div class="col-sm-9">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="diaChi" class="col-sm-3 control-label">Địa chỉ</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="diaChi" name="diaChi" placeholder="Nhập địa chỉ" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="dienThoai" class="col-sm-3 control-label">Điện thoại</label>
+        <div class="col-sm-9">
+            <input type="text" class="form-control" id="dienThoai" name="dienThoai" placeholder="Nhập số điện thoại" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="ngaySinh" class="col-sm-3 control-label">Ngày sinh</label>
+        <div class="col-sm-9">
+            <input type="date" class="form-control" id="ngaySinh" name="ngaySinh" placeholder="Chọn ngày sinh" />
+        </div>
+    </div>
+    <div class="form-group text-center">
+        <div class="col-sm-offset-3 col-sm-9">
+            <button type="submit" class="btn btn-lg" style="min-width: 150px; margin-right: 10px; background-color: #17a2b8; border-color: #17a2b8; color: #fff;">
+                Đăng ký
+            </button>
+            <a href="@Url.Action("Login", "Account")" class="btn btn-default btn-lg" style="min-width: 150px;">
+               </i> Đã có tài khoản? Đăng nhập
+            </a>
+        </div>
+    </div>
+</form>

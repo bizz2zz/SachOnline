@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\New folder</_PublishTargetUrl>
+    <History>True|2025-07-10T01:58:14.4617395Z||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DefaultConnection">
+      <Value>workstation id=BookStore.mssql.somee.com%3bpacket size=4096%3buser id=khang%3bpwd=superman1a%3bdata source=BookStore.mssql.somee.com%3bpersist security info=False%3binitial catalog=BookStore%3bTrustServerCertificate=True</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

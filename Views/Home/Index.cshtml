@@ -1,0 +1,80 @@
+﻿@model LuongVinhKhang.SachOnline.Models.PagedList<LuongVinhKhang.SachOnline.Models.Product>
+@{
+    ViewData["Title"] = "Trang Chu";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="d-flex justify-content-center mt-4">
+        <div class="alert alert-success text-center w-50 shadow rounded-pill fw-bold">
+            @TempData["SuccessMessage"]
+        </div>
+    </div>
+}
+
+<h2 class="text-center">SÁCH MỚI</h2>
+<hr>
+<div class="row text-center">
+    @if (!Model.Any())
+    {
+        <div class="alert alert-warning">Không có sản phẩm nào.</div>
+    }
+
+    else
+    {
+        @foreach (var product in Model)
+        {
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6 mb-4">
+                <div class="product-card border rounded p-2 shadow-sm h-100 d-flex flex-column justify-content-between">
+                    <a href="@Url.Action("BookDetails", "Home", new { id = product.Id })" class="text-decoration-none">
+                        <div class="d-flex justify-content-center align-items-center" style="height: 250px; overflow: hidden;">
+                            <img src="@Url.Content(product.Image != null ? "~/Images/" + product.Image : "~/Images/default.jpg")"
+                                 alt="@product.Name"
+                                 class="img-fluid"
+                                 style="max-height: 100%; max-width: 100%; object-fit: contain;" />
+                        </div>
+                    </a>
+
+                    <div class="caption text-center mt-3">
+                        <h5 class="fw-bold">@product.Name</h5>
+                        <p class="price text-danger mb-2">Giá: @product.Price.ToString("N0") VNĐ</p>
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <a href="@Url.Action("BookDetails", "Home", new { id = product.Id })" class="btn btn-outline-info btn-sm me-2">Xem chi tiết</a>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-shopping-cart"></i> Thêm vào giỏ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        }
+    }
+</div>
+
+<!-- Phân trang -->
+<nav class="text-center">
+    <ul class="pagination">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageIndex - 1 })" aria-label="Previous">
+                <span aria-hidden="true">«</span>
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(Model.PageIndex == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+            </li>
+        }
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" href="@Url.Action("Index", new { page = Model.PageIndex + 1 })" aria-label="Next">
+                <span aria-hidden="true">»</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+@section SachBanNhieu {
+    @await Html.PartialAsync("SachBanNhieuPartial")
+}

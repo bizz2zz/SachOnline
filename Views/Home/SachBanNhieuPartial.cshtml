@@ -1,0 +1,21 @@
+﻿<h3 class="text-center">SÁCH BÁN NHIỀU</h3>
+<div class="row text-center">
+    @foreach (var product in Model)
+    {
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6 mb-3">
+            <div class="thumbnail">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <img src="@Url.Content(product.Image != null ? "~/Images/" + product.Image : "~/Images/default.jpg")"
+                             alt="@product.Name"
+                             class="img-responsive img-rounded imgbook" />
+                    </div>
+                    <div class="col-xs-7 text-left" style="padding-left:10px;">
+                        <h5>@product.Name</h5>
+                        <h6>@product.MoTa</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
